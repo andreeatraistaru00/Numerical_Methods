@@ -1,0 +1,58 @@
+Problema 1.
+
+	Pentru functia "gps" am folosit o matrice B ajutatoare care contine numerele din diagrama labirintului. Matricea A, este matricea sistemului de ecuatii rezultat.
+  Mai intai am contruit elementele care nu sunt pe diagonala principala. Am observat ca  A(i,j) = A (j,i), pentru i!=j (i si j sunt elemente din matricea B). Daca i si j sunt    vecini atunci A(i,j) = -1 , altfel A(i,j) = 0;
+  Apoi am construit diagonala principala astfel: daca soricelul se afla la o intersectie care reprezinta unul dintre cele 3 colturi ale diagramei atunci vom pune 4, daca se afla 
+  pe o intersectie din marginea diagramei, dar care nu este colt vom pune 5, altfel vom pune 6.
+	Pentru functia csr am parcurs matricea A, iar cand am gasit elemente nenule le-am introdus in vectorul values, si am retinut in vectorul colind coloana pe care se afla.
+  La fel am procedat si pentru rowptr, dar am folosit un contor ok , care se modifica dupa ce am gasit primul element nenul de pe linie.
+
+Problema 2.
+
+ 	Variabila means este matricea centroizilor.
+	Variabila clust este folosita pentru a retine toate punctele mod NC. Astfel o linie din means reprezinta media aritmetica a coordonatelor centroizilor din clust, realizata cu ajutorul functiei mean.
+	- class contine centroizii dintr-un anumit cluster, selectatie in functie de distanta minima;
+	- Nclass reprezinta numarul centroizilor dintr- o anumita clasa;
+	- index_min reprezinta indexul elementului distantei minime;
+ 
+Problema 3.
+ 	Functia rgbHistogram
+		Cu ajutorul functiei "imread" care primeste ca parametru calea catre imaginea respectiva am deschis imaginea sub form unei matrici tridimensionale.
+		Pentru realizarea acestei operatii am apelat la o matrice , care imi da elementele ale caror valoare pentru nuante sunt in intervalul corespunzator.
+		Pentru a numara elementele am apelat functia "size" si, ca parametru pentru aceasta am dat image(matrice) (intoarce un vector).
+		Aplicand functia "size" pe vectorul descris mai sus obtin chiar valorile corespunzatoare pentru primele count_bins elemente din histograma RGB.
+		Analog, am procedat astfel si pentru celelalte 2 culori, verde si albastru.
+  
+   
+   	     Functia hsv_transf(R, G, B)
+		Functia de transformare din RGB in HSV.
+		Pentru aceasta functie am folosit algoritmul din pdf, dar aplicat pentru fiecare pixel. 
+		
+
+            Functia hsvHistogram
+
+		Aceasta functie lucreaza exact in acelasi mod ca si functia rgbHistogram , cu exceptia ca in loc sa numere din cele 3 matrice date de tabloul tridimensional
+	obtinut prin deschiderea imaginii folosind functia "imread", aceasta foloseste functia de conversie hsv_transf ce construieste alte 3 matrice.
+		
+
+          Functia preporcess
+		Aceasata functie realizeaza acumularea tutoror histogramelor iamginilor din cele 2 subdirectoare(cats si not_cats) din directoru care se gaseste la calea "path to a directory".
+		Pentru obtinerea caii fiecarui subdirector am folosit functia "strcat" pentru a concatena numele subdirectorului la sirul de caractere "path to a directory".
+		Pentru obtinerea tuturor histogramelor a fost necesara parcurgerea tuturor fisierelor.
+	    	Am realizat parcurgerea tuturor fisierelor cu ajutorul  functiei "dir".
+		Am aflat numarul fisierelor din directorul repsectiv cu ajutorul functiei size. Deoarece in fiecare director exista 2 fisiere ascunse("." si "..") si _DS_store  pentru parcurgerea tuturor fisierelor am folosit "for" de la 3(pentru a sari cele 2 fisiere ascunde) pana la nuamrul de fisiere - 1.
+		Pentru realizarea vectorului de etichete "y" am ales sa introduc mai intai valorile de 1 si apoi pe cele de -1, afland cate imagini cu pisici si fara psici sunt. 
+		
+	   Functia learn(X, t)
+
+		Aceasta functie primeste ca parametri matricea de invatare si vectorul de etichete, ambele elemente fiind obtinute la functia prezentata mai sus.
+		Dupa ce am concatenat o coloana plina de 1 la matricea X a trebuit sa rezolv sistemul X*w=t.
+		
+
+         Functia evaluate("path to a directory", w, tip_histograma, count_bins)
+
+		Aceasta functie realizeaza evaluarea tuturor pozelor din directorul care se afla la calea "path to a directory" ce contine 2 subdirectoare: "cats" si "not"cats".
+		Pentru evaluarea fiecarei imagini atrebui sa parcurg fiecare director si apoi toate fisierele din directorul curent.
+		Daca eram la in diretorul "cats" faceam histograma specificata de tipul histogramei la care mai adaugam 1 si efectuam produsul scalar cu w(vectorul de predictie). 
+		Analog si pentru "not_cats", dar produsul scalar trebuia sa fie negativ si il incrementam pe "not_cats".
+		
